@@ -1,8 +1,10 @@
 import { StyledCurrenciesList, StyledUl, StyleLi } from "./styles";
 import { useTradeContext } from "../../contexts/TradeContext";
+import { useTranslation } from "next-i18next";
 
 const CurrenciesList = () => {
   const { quotation, isQuotationLoaded } = useTradeContext();
+  const { t } = useTranslation();
 
   const quotationArray = [quotation.GBPUSD, quotation.USDGBP];
 
@@ -15,18 +17,18 @@ const CurrenciesList = () => {
               <StyleLi key={singleQuotation.name}>
                 <span>{`${singleQuotation.code}/${singleQuotation.codein}*`}</span>
                 <div>
-                  <span>BID</span>
+                  <span>{t("bid")}</span>
                   <span>{Number(singleQuotation.bid).toFixed(4)}</span>
                 </div>
                 <div>
-                  <span>ASK</span>
+                  <span>{t("ask")}</span>
                   <span>{Number(singleQuotation.ask).toFixed(4)}</span>
                 </div>
               </StyleLi>
             );
           })}
       </StyledUl>
-      <p>*Updates every 30 seconds.</p>
+      <p>{t("updatesEveryThirtySeconds")}</p>
     </StyledCurrenciesList>
   );
 };

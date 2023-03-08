@@ -1,7 +1,10 @@
+import { useTranslation } from "next-i18next";
 import { ITradeHistory } from "./interfaces";
 import { StyledTradeHistory } from "./styles";
 
 const TradeHistory = ({ tradeHistory }: ITradeHistory) => {
+  const { t } = useTranslation();
+
   const priceGBPFormated = new Intl.NumberFormat("en-UK", {
     style: "currency",
     currency: "GBP",
@@ -20,11 +23,17 @@ const TradeHistory = ({ tradeHistory }: ITradeHistory) => {
             return index === 0 ? (
               <>
                 <li key={"HEAD"}>
-                  <span style={{ fontWeight: "900" }}>Pair</span>
-                  <span style={{ fontWeight: "900" }}>Exchange rate</span>
-                  <span style={{ fontWeight: "900" }}>Exchanged amount</span>
-                  <span style={{ fontWeight: "900" }}>Received amount</span>
-                  <span style={{ fontWeight: "900" }}>Transaction type</span>
+                  <span style={{ fontWeight: "900" }}>{t("pair")}</span>
+                  <span style={{ fontWeight: "900" }}>{t("exchangeRate")}</span>
+                  <span style={{ fontWeight: "900" }}>
+                    {t("exchangedAmount")}
+                  </span>
+                  <span style={{ fontWeight: "900" }}>
+                    {t("receivedAmount")}
+                  </span>
+                  <span style={{ fontWeight: "900" }}>
+                    {t("transactionType")}
+                  </span>
                 </li>
                 <li key={trade.id}>
                   <span>{`${trade.fromCurrency}/${trade.toCurrency}`}</span>
@@ -39,7 +48,11 @@ const TradeHistory = ({ tradeHistory }: ITradeHistory) => {
                       ? priceUSDFormated.format(trade.outputAmount)
                       : priceGBPFormated.format(trade.outputAmount)}
                   </span>
-                  <span>{trade.transactionType}</span>
+                  <span>
+                    {trade.transactionType === "buy"
+                      ? t("buySpan")
+                      : t("sellSpan")}
+                  </span>
                 </li>
               </>
             ) : (
@@ -56,7 +69,11 @@ const TradeHistory = ({ tradeHistory }: ITradeHistory) => {
                     ? priceUSDFormated.format(trade.outputAmount)
                     : priceGBPFormated.format(trade.outputAmount)}
                 </span>
-                <span>{trade.transactionType}</span>
+                <span>
+                  {trade.transactionType === "buy"
+                    ? t("buySpan")
+                    : t("sellSpan")}
+                </span>
               </li>
             );
           })}

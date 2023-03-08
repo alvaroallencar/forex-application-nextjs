@@ -1,14 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import ReactLoading from "react-loading";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
-import { IQuotation } from "../../src/interfaces/trade";
-import { useUserContext } from "../../src/contexts/UserContext";
-import { useTradeContext } from "../../src/contexts/TradeContext";
-import { DashboardHeader } from "../../src/components/DashboardHeader";
-import { CurrenciesList } from "../../src/components/CurrenciesList";
-import { ExchangeForm } from "../../src/components/ExchangeForm";
-import { StyledDashboard } from "../../src/styles/pages/dashboard/styles";
-import GlobalStyle from "../../src/styles/GlobalStyle";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { IQuotation } from "../src/interfaces/trade";
+import { IGetStaticProps } from "../src/interfaces/staticProps";
+import { useUserContext } from "../src/contexts/UserContext";
+import { useTradeContext } from "../src/contexts/TradeContext";
+import { DashboardHeader } from "../src/components/DashboardHeader";
+import { CurrenciesList } from "../src/components/CurrenciesList";
+import { ExchangeForm } from "../src/components/ExchangeForm";
+import {
+  StyledDashboard,
+  StyledLoading,
+} from "../src/styles/pages/dashboard/styles";
+import GlobalStyle from "../src/styles/GlobalStyle";
+
+export const getStaticProps = async ({ locale }: IGetStaticProps) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
+  };
+};
 
 const DashboardPage = () => {
   const { user, handleLogout, handleGetUserInfo } = useUserContext();
@@ -47,7 +61,9 @@ const DashboardPage = () => {
           </StyledDashboard>
         </GlobalStyle>
       ) : (
-        <h1>Loading...</h1>
+        <StyledLoading>
+          <ReactLoading type="spin" color="black" height={64} width={64} />
+        </StyledLoading>
       )}
     </>
   );

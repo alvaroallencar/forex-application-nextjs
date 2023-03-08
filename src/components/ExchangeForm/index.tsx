@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 import { useTradeContext } from "../../contexts/TradeContext";
 import { ICreateTrade } from "../../interfaces/trade";
 import { useUserContext } from "../../contexts/UserContext";
@@ -11,6 +12,7 @@ const ExchangeForm = () => {
   const [amountToBuy, setAmountToBuy] = useState<number>(0);
   const [amountToSell, setAmountToSell] = useState<number>(0);
   const [hasErrors, setHasErrors] = useState<boolean>(true);
+  const { t } = useTranslation();
 
   const {
     quotation,
@@ -42,15 +44,15 @@ const ExchangeForm = () => {
 
     try {
       if (fromCurrency === "select" || toCurrency === "select") {
-        throw new Error("Please, select valid currencies.");
+        throw new Error(t("pleaseSelectValidCurrencies"));
       }
 
       if (fromCurrency === toCurrency) {
-        throw new Error("Currencies pairs need to be different.");
+        throw new Error(t("currenciesPairsNeedToBeDifferent"));
       }
 
       if (isNaN(amount) || amount === 0) {
-        throw new Error("Please, insert a valid value.");
+        throw new Error(t("pleaseInsertAValidValue"));
       }
 
       if (fromCurrency === "GBP" && toCurrency === "USD") {
@@ -94,7 +96,7 @@ const ExchangeForm = () => {
       hasErrors === false && createNewTrade(data);
     } catch (error) {
       console.log(error);
-      toast.warn("Trade not made.");
+      toast.warn(`${t("tradeNotMade")}`);
     }
   };
 
@@ -115,7 +117,7 @@ const ExchangeForm = () => {
       hasErrors === false && createNewTrade(data);
     } catch (error) {
       console.log(error);
-      toast.warn("Trade not made.");
+      toast.warn(`${t("tradeNotMade")}`);
     }
   };
 
@@ -133,9 +135,9 @@ const ExchangeForm = () => {
     <StyledSection>
       <StyledForm>
         <label>
-          From
+          {t("from")}
           <select defaultValue="select" onChange={(e) => handleFromSelect(e)}>
-            <option value="select">- Select -</option>
+            <option value="select">- {t("select")} -</option>
             {currencies.map((currency) => {
               return (
                 <option key={currency} value={currency}>
@@ -147,9 +149,9 @@ const ExchangeForm = () => {
         </label>
 
         <label>
-          To
+          {t("to")}
           <select defaultValue="select" onChange={(e) => handleToSelect(e)}>
-            <option value="select">- Select -</option>
+            <option value="select">- {t("select")} -</option>
             {currencies.map((currency) => {
               return (
                 <option key={currency} value={currency}>
@@ -163,7 +165,7 @@ const ExchangeForm = () => {
         <label>
           <input
             type="number"
-            placeholder="Amount"
+            placeholder={t("amount")}
             value={amountInputValue}
             min={0}
             onKeyUp={(e) => {
@@ -178,7 +180,7 @@ const ExchangeForm = () => {
             type="button"
             onClick={() => handleCalculate(amountInputValue)}
           >
-            Calculate
+            {t("calculate")}
           </button>
         </label>
 
@@ -197,7 +199,7 @@ const ExchangeForm = () => {
                 await handleClickToBuy();
               }}
             >
-              Buy
+              {t("buyButton")}
             </button>
           </div>
 
@@ -215,7 +217,7 @@ const ExchangeForm = () => {
                 await handleClickToSell();
               }}
             >
-              Sell
+              {t("sellButton")}
             </button>
           </div>
         </div>

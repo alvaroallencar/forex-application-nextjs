@@ -13,3 +13,12 @@ export const StyledDashboard = styled.main`
     width: 50%;
   }
 `;
+
+export const StyledLoading = styled.div`
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
